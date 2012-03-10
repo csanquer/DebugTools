@@ -1,0 +1,7 @@
+nbproject
+.cache
+.settings
+.project
+.buildpath
+.DS_Store
+__MACOSX
