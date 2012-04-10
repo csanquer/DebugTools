@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit 
+    bootstrap="vendor/.composer/autoload.php"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    stopOnFailure="false"
+    syntaxCheck="true"
+>
+    <testsuites>
+        <testsuite name="Debug Tools Library Unit Tests">
+            <directory>./tests/Csanquer/</directory>
+        </testsuite>
+    </testsuites>
+    
+    <filter>
+        <whitelist>
+          <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
+    
+    <logging>
+      <log type="coverage-html" target="build/coverage" charset="UTF-8"
+           yui="true" highlight="true"
+           lowUpperBound="40" highLowerBound="80"/>
+    </logging>
+</phpunit>
+

@@ -6,3 +6,4 @@ nbproject
 .DS_Store
 __MACOSX
 vendor
+build
