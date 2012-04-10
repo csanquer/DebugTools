@@ -1,0 +1,19 @@
+{
+    "name": "csanquer/debug-tools",
+    "description": "Debug tools and helpers library",
+    "type": "library",
+    "keywords": ["debug"],
+    "license": "LGPLv3",
+    "authors": [
+        {
+            "name": "Charles SANQUER",
+            "email": "charles.sanquer@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-0": {"Csanquer": "src/"}
+    }
+}

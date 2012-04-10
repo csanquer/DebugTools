@@ -1,3 +1,0 @@
-[submodule "vendor/ClassLoader"]
-	path = vendor/ClassLoader
-	url = https://github.com/symfony/ClassLoader.git
