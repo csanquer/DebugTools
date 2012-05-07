@@ -110,7 +110,7 @@ class Debug
      */
     protected function format($dump, $mode = true, $return = true)
     {
-        if (empty($mode))
+        if (empty($mode) || $mode === OutputFactory::MODE_NO_FORMAT)
         {
             return $dump;
         }
@@ -165,7 +165,7 @@ class Debug
             'value' => var_export($var, true),
             'call' => $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
-        
+        var_dump($dump);
         return $this->format($dump, $mode, $return);
     }
     
@@ -625,9 +625,13 @@ class Debug
      *
      * @return array
      */
-    public function getCallInfos($functionName = '', $className = null)
+    public function getCallInfos($functionName = null, $className = null)
     {
         $call = array();
+        if (is_null($functionName))
+        {
+            $functionName = __FUNCTION__;
+        }
         if (is_null($className))
         {
             $className = __CLASS__;
@@ -635,8 +639,8 @@ class Debug
         
         if (class_exists($className) && method_exists($className, $functionName))
         {
-            $trace = debug_backtrace();
-            while($callTrace = array_pop($trace))
+            $trace = debug_backtrace(false);
+            while($callTrace = array_shift($trace))
             {
                 if ($callTrace['function'] == $functionName && $callTrace['class'] == $className)
                 {
@@ -647,23 +651,23 @@ class Debug
         elseif (function_exists($functionName))
         {
             $trace = debug_backtrace();
-            while($callTrace = array_pop($trace))
+            while($callTrace = array_shift($trace))
             {
-                if ($callTrace['function'] == $functionName && $callTrace['class'] == '' )
+                if ($callTrace['function'] == $functionName && (!isset($callTrace['class']) || $callTrace['class'] == '') )
                 {
                     break;
                 }
             }
         }
-
-        if(!empty($callTrace))
+       
+        if (isset($callTrace['file']) && isset($callTrace['line']))
         {
             $call = array(
                 'file' => $callTrace['file'],
                 'line' => $callTrace['line'],
             );
         }
-
+        
         return $call;
     }
 }
