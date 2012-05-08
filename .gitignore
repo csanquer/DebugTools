@@ -7,3 +7,4 @@ nbproject
 __MACOSX
 vendor
 build
+phpunit.xml
