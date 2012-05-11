@@ -4,6 +4,9 @@ namespace Csanquer\DebugTools;
 
 use Csanquer\DebugTools\Output\OutputInterface;
 use Csanquer\DebugTools\Output\OutputFactory;
+use \ReflectionObject;
+use \ReflectionProperty;
+use \Exception;
 
 /**
  * Debugging tool class
@@ -12,8 +15,9 @@ use Csanquer\DebugTools\Output\OutputFactory;
  */
 class Dumper
 {
+
     const PHP_NO_ACCESS = 'php_no_access';
-    
+
     /**
      * var_export to dump infos array
      *
@@ -31,13 +35,13 @@ class Dumper
     {
         return array(
             'name' => $name,
-            'type' => 'var_export', 
-            'composite' => is_array($var) || is_object($var), 
+            'type' => 'var_export',
+            'composite' => is_array($var) || is_object($var),
             'value' => var_export($var, true),
-            'call' => $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
+            'call' => $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
     }
-    
+
     /**
      * print_r to dump infos array
      *
@@ -55,10 +59,10 @@ class Dumper
     {
         return array(
             'name' => $name,
-            'type' => 'print_r', 
-            'composite' => is_array($var) || is_object($var), 
+            'type' => 'print_r',
+            'composite' => is_array($var) || is_object($var),
             'value' => print_r($var, true),
-            'call' => $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
+            'call' => $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
     }
 
@@ -83,13 +87,13 @@ class Dumper
         $value = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $value);
 
         $xdebugEnabled = extension_loaded('xdebug');
-        
+
         return array(
             'name' => $name,
-            'type' => 'var_dump', 
-            'composite' => is_array($var) || is_object($var), 
+            'type' => 'var_dump',
+            'composite' => is_array($var) || is_object($var),
             'value' => $value,
-            'call' => $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
+            'call' => $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
     }
 
@@ -112,13 +116,13 @@ class Dumper
         debug_zval_dump($var);
         $value = ob_get_clean();
         $value = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $value);
-        
+
         return array(
             'name' => $name,
-            'type' => 'zval_dump', 
-            'composite' => is_array($var) || is_object($var), 
+            'type' => 'zval_dump',
+            'composite' => is_array($var) || is_object($var),
             'value' => $value,
-            'call' => $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
+            'call' => $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
     }
 
@@ -140,12 +144,12 @@ class Dumper
             'name' => 'backtrace',
             'type' => 'backtrace',
             'composite' => true,
-            'max_char' => isset($options['max_char']) ? (int) $options['max_char'] : 180, 
+            'max_char' => isset($options['max_char']) ? (int) $options['max_char'] : 180,
             'value' => debug_backtrace(),
-            'call' => $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
+            'call' => $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
-    }    
-    
+    }
+
     /**
      *  custom dump to dump infos array
      * 
@@ -162,20 +166,15 @@ class Dumper
     public function dump($var, $name = null, $maxDepth = 4, array $options = array())
     {
         $dump = $this->doDump(
-                $var, 
-                $maxDepth, 
-                isset($options['max_char']) ? (int) $options['max_char'] : null, 
-                isset($options['dump_content']) ? (bool) $options['dump_content'] : true, 
-                isset($options['with_trace']) ? (bool) $options['with_trace'] : true, 
-                0
+                $var, is_numeric($maxDepth) && $maxDepth >= 0 ? $maxDepth : 4, isset($options['max_char']) ? (int) $options['max_char'] : null, isset($options['dump_content']) ? (bool) $options['dump_content'] : true, isset($options['with_trace']) ? (bool) $options['with_trace'] : true, 0
         );
-        
+
         $dump['name'] = $name;
-        $dump['call'] = $this->getCallInfos(empty($options['function'])? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class']);
-        
+        $dump['call'] = $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class']);
+
         return $dump;
     }
-    
+
     /**
      *
      * @param mixed $var
@@ -197,10 +196,10 @@ class Dumper
             $dump = $this->doDumpScalar($var, $maxCharacter);
         }
         // special types
-        elseif (is_null($var)) 
+        elseif (is_null($var))
         {
             $dump = array(
-                'type' => 'NULL', 
+                'type' => 'NULL',
                 'composite' => false,
                 'value' => null,
             );
@@ -211,9 +210,9 @@ class Dumper
             $resType = get_resource_type($var);
             preg_match('/\d+/', (string) $var, $matches);
             $dump = array(
-                'type' => 'Resource', 
+                'type' => 'resource',
                 'composite' => false,
-                'value' => (!empty($matches[0]) ? $matches[0] : ''), 
+                'value' => (!empty($matches[0]) ? $matches[0] : ''),
                 'resource_type' => ((empty($resType) || $resType == 'Unknown') ? 'Unknown' : $resType)
             );
         }
@@ -224,13 +223,13 @@ class Dumper
             $dump = $this->doDumpArray($var, $maxDepth, $maxCharacter, $dumpContent, $displayTrace, $depth);
         }
         // object
-        elseif(is_object($var))
+        elseif (is_object($var))
         {
             $dump = $this->doDumpObject($var, $maxDepth, $maxCharacter, $dumpContent, $displayTrace, $depth);
         }
         return $dump;
     }
-    
+
     /**
      *
      * @param mixed $var
@@ -238,14 +237,14 @@ class Dumper
      * 
      * @return array 
      */
-    protected function doDumpScalar($var , $maxCharacter = null)
+    protected function doDumpScalar($var, $maxCharacter = null)
     {
         $dump = array();
         if (is_int($var))
         {
             $dump = array('type' => 'int', 'value' => $var);
         }
-        elseif (is_float($var)) 
+        elseif (is_float($var))
         {
             $dump = array('type' => 'float', 'value' => $var);
         }
@@ -258,13 +257,14 @@ class Dumper
             }
             $dump = array('type' => 'string', 'value' => $var, 'length' => $length, 'max_length' => $maxCharacter);
         }
-        elseif (is_bool($var)) 
+        elseif (is_bool($var))
         {
             $dump = array('type' => 'bool', 'value' => $var);
         }
+        $dump['composite'] = false;
         return $dump;
     }
-    
+
     /**
      * dump an array
      *
@@ -282,30 +282,30 @@ class Dumper
     protected function doDumpArray(array $array, $maxDepth = 4, $maxCharacter = null, $dumpContent = true, $displayTrace = true, $depth = 0)
     {
         $length = count($array);
-        
+
         $values = array();
-        if($dumpContent && $depth < $maxDepth)
+        if ($dumpContent && $depth < $maxDepth)
         {
-            foreach($array as $key => $value)
+            foreach ($array as $key => $value)
             {
-                $values[$key] = $this->doDump($value, $maxDepth, $maxCharacter, $dumpContent, $displayTrace, $depth+1);
+                $values[$key] = $this->doDump($value, $maxDepth, $maxCharacter, $dumpContent, $displayTrace, $depth + 1);
             }
         }
         else
         {
             $values = '...';
         }
-        
+
         $dump = array(
-            'type' => 'array', 
+            'type' => 'array',
             'composite' => true,
-            'value' => $values, 
+            'value' => $values,
             'length' => $length
         );
-        
+
         return $dump;
     }
-    
+
     /**
      * dump an object
      *
@@ -326,37 +326,47 @@ class Dumper
 
         $reflexionObject = new ReflectionObject($object);
         $propertiesList = array();
-        
+
         if ($dumpContent)
         {
-            if($depth < $maxDepth)
+            if ($depth < $maxDepth)
             {
                 $properties = $reflexionObject->getProperties();
-                foreach($properties as $property)
+                foreach ($properties as $property)
                 {
-                    $propertiesList[$property->getName()] .= $this->doDumpObjectProperty($property, $object, $maxDepth-1, $maxCharacter, $displayTrace, $depth)."\n";
+                    if (!$isException || $isException && $property->getName() != 'previous' && $property->getName() != 'trace')
+                    {
+                        $propertiesList[$property->getName()] = $this->doDumpObjectProperty($property, $object, $maxDepth - 1, $maxCharacter, $displayTrace, $depth);
+                    }
                 }
-                
-                 if ($isException)
-                 {
-                     $propertiesList['trace'] = array(
-                         'type' => 'backtrace', 
-                         'max_char' => isset($maxCharacter) ? (int) $maxCharacter : 180, 
-                         'value' => $displayTrace ? $object->getTrace() : null,
-                     );
-                     
-                     if (method_exists($object, 'getPrevious') && $object->getPrevious() != null)
-                     {
-                         $propertiesList['previous'] = $this->doDumpObject($object->getPrevious(), $maxDepth, $maxCharacter, $dumpContent, $displayTrace, $depth+1);
-                     }
-                 }
+
+                if ($isException)
+                {
+                    if ($displayTrace)
+                    {
+                        $propertiesList['trace'] = array(
+                            'type' => 'backtrace',
+                            'composite' => true,
+                            'max_char' => isset($maxCharacter) ? (int) $maxCharacter : 180,
+                            'value' => $object->getTrace(),
+                        );
+                    }
+                    
+                    if (method_exists($object, 'getPrevious') && $object->getPrevious() instanceof Exception)
+                    {
+                        $propertiesList['previous'] = $this->doDumpObject($object->getPrevious(), $maxDepth, $maxCharacter, $dumpContent, false, $depth + 1);
+                    }
+                }
             }
         }
+        
         $dump = array(
-            'type' => $isException ? 'exception' : 'object', 
+            'type' => $isException ? 'exception' : 'object',
             'composite' => true,
-            'class' => $reflexionObject->getName(), 
-            'properties' => $propertiesList);
+            'class' => $reflexionObject->getName(),
+            'properties' => $propertiesList,
+        );
+        
         return $dump;
     }
 
@@ -389,37 +399,45 @@ class Dumper
             $access = 'protected';
         }
 
-        if($property->isPublic()) 
+        if ($property->isPublic())
         {
-            $value = $this->doDump($property->getValue($object), $maxDepth, $maxCharacter, true, $displayTrace, $depth+1);
+            $value = $this->doDump($property->getValue($object), $maxDepth, $maxCharacter, true, $displayTrace, $depth + 1);
         }
         // in PHP >= 5.3 can retrieve private or protected value
-        elseif(method_exists($property,'setAccessible'))
+        else
         {
             $property->setAccessible(true);
-            $value = $this->doDump($property->getValue($object), $maxDepth, $maxCharacter, true, $displayTrace, $depth+1);
+            $value = $this->doDump($property->getValue($object), $maxDepth, $maxCharacter, true, $displayTrace, $depth + 1);
         }
-        elseif(!$property->isStatic() && method_exists($object, '__get'))
+        /**
+        // in PHP >= 5.3 can retrieve private or protected value
+        elseif (method_exists($property, 'setAccessible'))
+        {
+            $property->setAccessible(true);
+            $value = $this->doDump($property->getValue($object), $maxDepth, $maxCharacter, true, $displayTrace, $depth + 1);
+        }
+        elseif (!$property->isStatic() && method_exists($object, '__get'))
         {
             $propertyName = $property->getName();
             $value = $object->$propertyName;
-            $value = $this->doDump($value, $maxDepth, $mode, $maxCharacter, true, $displayTrace, $depth+1);
+            $value = $this->doDump($value, $maxDepth, $mode, $maxCharacter, true, $displayTrace, $depth + 1);
         }
-        //TODO doesn't work properly if the class has many properties with same name but different cases
-        //    elseif(!$property->isStatic() && method_exists($object, 'get'.ucFirst($property->getName())))
-        //    {
-        //       $value = call_user_func(array($object, 'get'.ucFirst($property->getName())));
-        //       $value = $this->doDump($value, $maxDepth, true, $maxCharacter, $depth+1);
-        //    }
+//TODO doesn't work properly if the class has many properties with same name but different cases
+//    elseif(!$property->isStatic() && method_exists($object, 'get'.ucFirst($property->getName())))
+//    {
+//       $value = call_user_func(array($object, 'get'.ucFirst($property->getName())));
+//       $value = $this->doDump($value, $maxDepth, true, $maxCharacter, $depth+1);
+//    }
         else
         {
             $value = self::PHP_NO_ACCESS;
         }
-
+/**/
         $dump = array(
-            'type' => 'property', 
-            'composite' => false, 
-            'access' => $access, 
+            'type' => 'property',
+            'composite' => false,
+            'access' => $access,
+            'static' => $property->isStatic(),
             'value' => $value
         );
         
@@ -446,7 +464,7 @@ class Dumper
             return $var ? 'TRUE' : 'FALSE';
         }
 
-        if(is_resource($var))
+        if (is_resource($var))
         {
             $return = get_resource_type($var);
             return (empty($return) || $return == 'Unknown') ? 'Unknown Resource' : $return;
@@ -458,12 +476,12 @@ class Dumper
             {
                 return $var->__toString();
             }
-            return 'Object '.get_class($var);
+            return 'Object ' . get_class($var);
         }
 
         return (string) $var;
     }
-    
+
     /**
      * get information about file and line where the dump function was called
      *
@@ -485,11 +503,11 @@ class Dumper
         {
             $className = __CLASS__;
         }
-        
+
         if (class_exists($className) && method_exists($className, $functionName))
         {
             $trace = debug_backtrace(false);
-            while($callTrace = array_shift($trace))
+            while ($callTrace = array_shift($trace))
             {
                 if ($callTrace['function'] == $functionName && $callTrace['class'] == $className)
                 {
@@ -500,7 +518,7 @@ class Dumper
         elseif (function_exists($functionName))
         {
             $trace = debug_backtrace();
-            while($callTrace = array_shift($trace))
+            while ($callTrace = array_shift($trace))
             {
                 if ($callTrace['function'] == $functionName && (!isset($callTrace['class']) || $callTrace['class'] == ''))
                 {
@@ -508,7 +526,7 @@ class Dumper
                 }
             }
         }
-       
+
         if (isset($callTrace['file']) && isset($callTrace['line']))
         {
             $call = array(
@@ -516,7 +534,8 @@ class Dumper
                 'line' => $callTrace['line'],
             );
         }
-        
+
         return $call;
     }
+
 }

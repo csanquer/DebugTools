@@ -1,4 +1,5 @@
 <?php
+
 namespace Csanquer\DebugTools\Test;
 
 use Csanquer\DebugTools\Output\OutputInterface;
@@ -13,18 +14,22 @@ class WithoutToString
 
 class WithToString
 {
+
     public function __toString()
     {
         return 'this class has __toString method';
     }
+
 }
 
 class WrapperClass
 {
+
     public function getCallInfos(Dumper $debug)
     {
         return $debug->getCallInfos(__FUNCTION__, __CLASS__);
     }
+
 }
 
 function wrapperFunction(Dumper $debug)
@@ -32,8 +37,22 @@ function wrapperFunction(Dumper $debug)
     return $debug->getCallInfos(__FUNCTION__);
 }
 
+class TestDump
+{
+
+    protected static $f = 'static';
+    private $a = true;
+    protected $b = 1;
+    public $c = 'hello';
+    private $d = array(
+        'e' => 5
+    );
+
+}
+
 class DumperTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var Csanquer\DebugTools\Dumper
      */
@@ -43,7 +62,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      * @var resource
      */
     protected $file;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -51,7 +70,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->dumper = new Dumper();
-        $this->file = fopen(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'test.txt', 'r');
+        $this->file = fopen(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'test.txt', 'r');
     }
 
     /**
@@ -60,7 +79,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-         fclose($this->file);
+        fclose($this->file);
     }
 
     /**
@@ -77,7 +96,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             $this->assertNotEquals($expectedNotEquals, $result);
         }
     }
-    
+
     public function asStringProvider()
     {
         return array(
@@ -89,10 +108,10 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             array('a string', 'a string', 'A string'),
             array(new WithoutToString(), 'Object Csanquer\DebugTools\Test\WithoutToString', null),
             array(new WithToString(), 'this class has __toString method', 'Object Csanquer\DebugTools\Test\WithToString'),
-            array(array('a', 1 , 'b' => 'test', array( 0 => 'b')), 'Array', null),
+            array(array('a', 1, 'b' => 'test', array(0 => 'b')), 'Array', null),
         );
     }
-        
+
     /**
      * @covers Csanquer\DebugTools\Dumper::asString
      */
@@ -102,7 +121,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $result);
         $this->assertEquals('stream', $result);
     }
-    
+
     /**
      * @covers Csanquer\DebugTools\Dumper::getCallInfos
      */
@@ -112,38 +131,38 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $infos = $this->dumper->getCallInfos();
         $this->assertArrayHasKey('file', $infos);
         $this->assertArrayHasKey('line', $infos);
-        
-        $file = isset($infos['file']) ? $infos['file']: null;
-        $line = isset($infos['line']) ? $infos['line']: null;
-        
+
+        $file = isset($infos['file']) ? $infos['file'] : null;
+        $line = isset($infos['line']) ? $infos['line'] : null;
+
         $this->assertEquals(__FILE__, $file);
-        $this->assertEquals($callline+1, $line);
-        
+        $this->assertEquals($callline + 1, $line);
+
         $wrap = new WrapperClass();
         $callline = __LINE__;
         $infos = $wrap->getCallInfos($this->dumper);
-        
+
         $this->assertArrayHasKey('file', $infos);
         $this->assertArrayHasKey('line', $infos);
-        
-        $file = isset($infos['file']) ? $infos['file']: null;
-        $line = isset($infos['line']) ? $infos['line']: null;
-        
+
+        $file = isset($infos['file']) ? $infos['file'] : null;
+        $line = isset($infos['line']) ? $infos['line'] : null;
+
         $this->assertEquals(__FILE__, $file);
-        $this->assertEquals($callline+1, $line);
-        
+        $this->assertEquals($callline + 1, $line);
+
         $callline = __LINE__;
         $infos = wrapperFunction($this->dumper);
         $this->assertArrayHasKey('file', $infos);
         $this->assertArrayHasKey('line', $infos);
-        
-        $file = isset($infos['file']) ? $infos['file']: null;
-        $line = isset($infos['line']) ? $infos['line']: null;
-        
+
+        $file = isset($infos['file']) ? $infos['file'] : null;
+        $line = isset($infos['line']) ? $infos['line'] : null;
+
         $this->assertEquals(__FILE__, $file);
-        $this->assertEquals($callline+1, $line);
+        $this->assertEquals($callline + 1, $line);
     }
-   
+
     /**
      * @covers Csanquer\DebugTools\Dumper::var_export
      * @dataProvider var_exportProvider
@@ -152,21 +171,21 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     {
         $callLine = __LINE__;
         $export = $this->dumper->var_export($var, 'a var export');
-        
+
         $expected = array(
             'name' => 'a var export',
             'type' => 'var_export',
             'composite' => is_array($var) || is_object($var),
             'value' => $expectedValue,
-            'call' => array (
+            'call' => array(
                 'file' => __FILE__,
-                'line' => $callLine+1,
+                'line' => $callLine + 1,
             ),
         );
-        
+
         $this->assertEquals($expected, $export);
     }
- 
+
     public function var_exportProvider()
     {
         return array(
@@ -196,7 +215,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             ),
         );
     }
-    
+
     /**
      * @covers Csanquer\DebugTools\Dumper::print_r
      * @dataProvider print_rProvider
@@ -204,22 +223,22 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testPrint_r($var, $expectedValue)
     {
         $callLine = __LINE__;
-        $export = $this->dumper->print_r($var, 'a print_r');
-        
+        $dump = $this->dumper->print_r($var, 'a print_r');
+
         $expected = array(
             'name' => 'a print_r',
             'type' => 'print_r',
             'composite' => is_array($var) || is_object($var),
             'value' => $expectedValue,
-            'call' => array (
+            'call' => array(
                 'file' => __FILE__,
-                'line' => $callLine+1,
+                'line' => $callLine + 1,
             ),
         );
-        
-        $this->assertEquals($expected, $export);
+
+        $this->assertEquals($expected, $dump);
     }
-    
+
     public function print_rProvider()
     {
         return array(
@@ -253,7 +272,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             ),
         );
     }
-    
+
     /**
      * @covers Csanquer\DebugTools\Dumper::var_dump
      * @dataProvider var_dumpProvider
@@ -261,22 +280,22 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testVar_dump($var, $expectedValue)
     {
         $callLine = __LINE__;
-        $export = $this->dumper->var_dump($var, 'a var_dump');
-        
+        $dump = $this->dumper->var_dump($var, 'a var_dump');
+
         $expected = array(
             'name' => 'a var_dump',
             'type' => 'var_dump',
             'composite' => is_array($var) || is_object($var),
             'value' => $expectedValue,
-            'call' => array (
+            'call' => array(
                 'file' => __FILE__,
-                'line' => $callLine+1,
+                'line' => $callLine + 1,
             ),
         );
-        
-        $this->assertEquals($expected, $export);
+
+        $this->assertEquals($expected, $dump);
     }
-    
+
     public function var_dumpProvider()
     {
         return array(
@@ -310,7 +329,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             ),
         );
     }
-    
+
     /**
      * @covers Csanquer\DebugTools\Dumper::zval_dump
      * @dataProvider zval_dumpProvider
@@ -318,31 +337,31 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testZval_dump($var, $expectedValue)
     {
         $callLine = __LINE__;
-        $export = $this->dumper->zval_dump($var, 'a zval_dump');
-        
+        $dump = $this->dumper->zval_dump($var, 'a zval_dump');
+
         $expected = array(
             'name' => 'a zval_dump',
             'type' => 'zval_dump',
             'composite' => is_array($var) || is_object($var),
             'value' => $expectedValue,
-            'call' => array (
+            'call' => array(
                 'file' => __FILE__,
-                'line' => $callLine+1,
+                'line' => $callLine + 1,
             ),
         );
-        
-        $this->assertInternalType('array', $export);
-        $this->assertArrayHasKey('name', $export);
-        $this->assertArrayHasKey('type', $export);
-        $this->assertArrayHasKey('composite', $export);
-        $this->assertArrayHasKey('value', $export);
-        $this->assertArrayHasKey('call', $export);
-        
-        $this->assertEquals($expected['name'], $export['name']);
-        $this->assertEquals($expected['type'], $export['type']);
-        $this->assertEquals($expected['composite'], $export['composite']);
-        $this->assertEquals($expected['call'], $export['call']);
-        $this->assertRegExp($expected['value'], $export['value']);
+
+        $this->assertInternalType('array', $dump);
+        $this->assertArrayHasKey('name', $dump);
+        $this->assertArrayHasKey('type', $dump);
+        $this->assertArrayHasKey('composite', $dump);
+        $this->assertArrayHasKey('value', $dump);
+        $this->assertArrayHasKey('call', $dump);
+
+        $this->assertEquals($expected['name'], $dump['name']);
+        $this->assertEquals($expected['type'], $dump['type']);
+        $this->assertEquals($expected['composite'], $dump['composite']);
+        $this->assertEquals($expected['call'], $dump['call']);
+        $this->assertRegExp($expected['value'], $dump['value']);
     }
 
     public function zval_dumpProvider()
@@ -378,19 +397,471 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             ),
         );
     }
-    
-    /**
-     * @covers Csanquer\DebugTools\Dumper::dump
-     * @todo   Implement testDump().
-     */
-    public function testDump()
+
+    public function testDumpResource()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $callLine = __LINE__;
+        $dump = $this->dumper->dump($this->file, 'a custom resource dump', null, array('max_char' => null));
+
+        $expected = array(
+            'type' => 'resource',
+            'composite' => false,
+            'value' => '163',
+            'resource_type' => 'stream',
+            'name' => 'a custom resource dump',
+            'call' => array(
+                'file' => __FILE__,
+                'line' => $callLine + 1,
+            ),
+        );
+
+        $this->assertEquals($expected, $dump);
+    }
+
+    public function testDumpException()
+    {
+        $line = __LINE__ +1;
+        $exception = new \ErrorException('an error occured', 101, 1, __FILE__, __LINE__, new \Exception('an exception'));
+
+        $callLine = __LINE__;
+        $dump = $this->dumper->dump($exception, 'an exception', null, array('max_char' => null));
+
+        $this->assertInternalType('array', $dump);
+        $this->assertArrayHasKey('name', $dump);
+        $this->assertArrayHasKey('type', $dump);
+        $this->assertArrayHasKey('composite', $dump);
+        $this->assertArrayHasKey('class', $dump);
+        $this->assertArrayHasKey('properties', $dump);
+        $this->assertArrayHasKey('call', $dump);
+
+        $this->assertEquals('an exception', $dump['name']);
+        $this->assertEquals('exception', $dump['type']);
+        $this->assertTrue($dump['composite']);
+        $this->assertEquals(array(
+            'file' => __FILE__,
+            'line' => $callLine + 1,
+                ), $dump['call']);
+
+        $this->assertEquals('ErrorException', $dump['class']);
+
+        $props = $dump['properties'];
+
+        $this->assertInternalType('array', $props);
+        $this->assertCount(7, $props);
+
+        $this->assertEquals(array(
+            'type' => 'property',
+            'composite' => false,
+            'access' => 'protected',
+            'static' => false,
+            'value' =>
+            array(
+                'type' => 'string',
+                'value' => 'an error occured',
+                'length' => 16,
+                'max_length' => NULL,
+                'composite' => false,
+                )), $props['message']);
+
+        $this->assertEquals(array(
+            'type' => 'property',
+            'composite' => false,
+            'access' => 'protected',
+            'static' => false,
+            'value' =>
+            array(
+                'type' => 'int',
+                'value' => 101,
+                'composite' => false,
+                )), $props['code']);
+
+        $this->assertEquals(array(
+            'type' => 'property',
+            'composite' => false,
+            'access' => 'protected',
+            'static' => false,
+            'value' =>
+            array(
+                'type' => 'string',
+                'value' => __FILE__,
+                'length' => 79,
+                'max_length' => NULL,
+                'composite' => false,
+                )), $props['file']);
+
+        $this->assertEquals(array(
+            'type' => 'property',
+            'composite' => false,
+            'access' => 'protected',
+            'static' => false,
+            'value' =>
+            array(
+                'type' => 'int',
+                'value' => $line,
+                'composite' => false,
+                )), $props['line']);
+
+        $this->assertEquals(array(
+            'type' => 'property',
+            'composite' => false,
+            'access' => 'protected',
+            'static' => false,
+            'value' =>
+            array(
+                'type' => 'int',
+                'value' => 1,
+                'composite' => false,
+                )), $props['severity']);
+        
+        //trace
+        $this->assertArrayHasKey('trace', $props);
+        $this->assertInternalType('array', $props['trace']);
+        $this->assertNotEmpty($props['trace']);
+        
+        // previous exception
+        $this->assertArrayHasKey('previous', $props);
+        $this->assertInternalType('array', $props['previous']);
+        $this->assertArrayHasKey('type', $props['previous']);
+        $this->assertArrayHasKey('composite', $props['previous']);
+        $this->assertArrayHasKey('class', $props['previous']);
+        $this->assertArrayHasKey('properties', $props['previous']);
+
+        $this->assertEquals('exception', $props['previous']['type']);
+        $this->assertTrue($props['previous']['composite']);
+        $this->assertEquals('Exception', $props['previous']['class']);
+        $this->assertCount(5, $props['previous']['properties']);
+        
+        // previous exception trace
+        $this->assertArrayNotHasKey('trace', $props['previous']['properties']);
+    }
+
+    /**
+     * @dataProvider dumpProvider
+     */
+    public function testDump($var, $maxDepth, $maxChar, $expected)
+    {
+        $callLine = __LINE__;
+        $dump = $this->dumper->dump($var, 'a custom dump', $maxDepth, array('max_char' => $maxChar));
+
+        $expected = array_merge(
+                $expected, array(
+            'name' => 'a custom dump',
+            'call' => array(
+                'file' => __FILE__,
+                'line' => $callLine + 1,
+            ),
+                )
+        );
+
+        $this->assertEquals($expected, $dump);
+    }
+
+    public function dumpProvider()
+    {
+        $longString = 'Nullam sit amet libero orci, id bibendum sem. Nunc hendrerit elit ac mauris rhoncus vitae sollicitudin leo pharetra. Nunc imperdiet ultrices purus volutpat elementum. In hendrerit tristique augue, ultrices posuere eros pellentesque in. Sed velit dolor, ultrices eu consectetur vel, lacinia vitae nulla. Aenean purus est, venenatis quis pulvinar vitae, mollis in velit. Pellentesque laoreet, risus vel adipiscing condimentum, justo neque tincidunt nulla, at mollis lacus ipsum vitae ligula? Cras rutrum vestibulum augue in dignissim. Donec neque ligula, rutrum quis faucibus posuere, pharetra a arcu.';
+
+        return array(
+            array(
+                null,
+                null,
+                null,
+                array(
+                    'type' => 'NULL',
+                    'composite' => false,
+                    'value' => null,
+                )
+            ),
+            array(
+                true,
+                null,
+                null,
+                array(
+                    'type' => 'bool',
+                    'composite' => false,
+                    'value' => true,
+                )
+            ),
+            array(
+                false,
+                null,
+                null,
+                array(
+                    'type' => 'bool',
+                    'composite' => false,
+                    'value' => false,
+                )
+            ),
+            array(
+                2,
+                null,
+                null,
+                array(
+                    'type' => 'int',
+                    'composite' => false,
+                    'value' => 2,
+                )
+            ),
+            array(
+                2.1,
+                null,
+                null,
+                array(
+                    'type' => 'float',
+                    'composite' => false,
+                    'value' => 2.1,
+                )
+            ),
+            array(
+                'hello',
+                null,
+                null,
+                array(
+                    'type' => 'string',
+                    'composite' => false,
+                    'value' => 'hello',
+                    'length' => 5,
+                    'max_length' => null,
+                )
+            ),
+            array(
+                $longString,
+                null,
+                20,
+                array(
+                    'type' => 'string',
+                    'composite' => false,
+                    'value' => 'Nullam sit amet libe',
+                    'length' => 599,
+                    'max_length' => 20,
+                )
+            ),
+            array(
+                new TestDump(),
+                null,
+                null,
+                array(
+                    'type' => 'object',
+                    'composite' => true,
+                    'class' => 'Csanquer\DebugTools\Test\TestDump',
+                    'properties' => array(
+                        'f' =>
+                        array(
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => true,
+                            'value' =>
+                            array(
+                                'type' => 'string',
+                                'value' => 'static',
+                                'length' => 6,
+                                'max_length' => NULL,
+                                'composite' => false,
+                            ),
+                        ),
+                        'a' =>
+                        array(
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'private',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'bool',
+                                'value' => true,
+                                'composite' => false,
+                            ),
+                        ),
+                        'b' =>
+                        array(
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'int',
+                                'value' => 1,
+                                'composite' => false,
+                            ),
+                        ),
+                        'c' =>
+                        array(
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'public',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'string',
+                                'value' => 'hello',
+                                'length' => 5,
+                                'max_length' => NULL,
+                                'composite' => false,
+                            ),
+                        ),
+                        'd' =>
+                        array(
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'private',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'array',
+                                'composite' => true,
+                                'value' =>
+                                array(
+                                    'e' =>
+                                    array(
+                                        'type' => 'int',
+                                        'value' => 5,
+                                        'composite' => false,
+                                    ),
+                                ),
+                                'length' => 1,
+                            ),
+                        ),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'a' => 1,
+                    'b' => 'hello',
+                    array(
+                        'c' => array(
+                            array(
+                                2 => array(
+                                    'd' => null,
+                                    false
+                                ),
+                            ),
+                            'e' => true
+                        ),
+                    ),
+                ),
+                null,
+                null,
+                array(
+                    'type' => 'array',
+                    'composite' => true,
+                    'length' => 3,
+                    'value' => array(
+                        'a' =>
+                        array(
+                            'type' => 'int',
+                            'value' => 1,
+                            'composite' => false,
+                        ),
+                        'b' =>
+                        array(
+                            'type' => 'string',
+                            'value' => 'hello',
+                            'length' => 5,
+                            'max_length' => null,
+                            'composite' => false,
+                        ),
+                        0 => array(
+                            'type' => 'array',
+                            'composite' => true,
+                            'value' =>
+                            array(
+                                'c' =>
+                                array(
+                                    'type' => 'array',
+                                    'composite' => true,
+                                    'value' =>
+                                    array(
+                                        0 =>
+                                        array(
+                                            'type' => 'array',
+                                            'composite' => true,
+                                            'value' =>
+                                            array(
+                                                2 =>
+                                                array(
+                                                    'type' => 'array',
+                                                    'composite' => true,
+                                                    'value' => '...',
+                                                    'length' => 2,
+                                                ),
+                                            ),
+                                            'length' => 1,
+                                        ),
+                                        'e' =>
+                                        array(
+                                            'type' => 'bool',
+                                            'value' => true,
+                                            'composite' => false,
+                                        ),
+                                    ),
+                                    'length' => 2,
+                                ),
+                            ),
+                            'length' => 1,
+                        ),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'a' => 1,
+                    'b' => 'hello',
+                    array(
+                        'c' => array(
+                            array(
+                                2 => array(
+                                    'd' => null,
+                                    false
+                                ),
+                            ),
+                            'e' => true
+                        ),
+                    ),
+                ),
+                2,
+                null,
+                array(
+                    'type' => 'array',
+                    'composite' => true,
+                    'length' => 3,
+                    'value' => array(
+                        'a' =>
+                        array(
+                            'type' => 'int',
+                            'value' => 1,
+                            'composite' => false,
+                        ),
+                        'b' =>
+                        array(
+                            'type' => 'string',
+                            'value' => 'hello',
+                            'length' => 5,
+                            'max_length' => null,
+                            'composite' => false,
+                        ),
+                        0 => array(
+                            'type' => 'array',
+                            'composite' => true,
+                            'value' =>
+                            array(
+                                'c' =>
+                                array(
+                                    'type' => 'array',
+                                    'composite' => true,
+                                    'value' => '...',
+                                    'length' => 2,
+                                ),
+                            ),
+                            'length' => 1,
+                        ),
+                    ),
+                )
+            ),
         );
     }
-        
+
     /**
      * @covers Csanquer\DebugTools\Dumper::backtrace
      * @dataProvider backtraceProvider
@@ -398,35 +869,35 @@ class DumperTest extends \PHPUnit_Framework_TestCase
     public function testBacktrace($maxChar, $expectedMaxChar)
     {
         $callLine = __LINE__;
-        $export = $this->dumper->backtrace(array('max_char' => $maxChar));
-        
+        $trace = $this->dumper->backtrace(array('max_char' => $maxChar));
+
         $expected = array(
             'name' => 'backtrace',
             'type' => 'backtrace',
             'composite' => true,
             'max_char' => $expectedMaxChar,
-            'call' => array (
+            'call' => array(
                 'file' => __FILE__,
-                'line' => $callLine+1,
+                'line' => $callLine + 1,
             ),
         );
-        
-        $this->assertInternalType('array', $export);
-        $this->assertArrayHasKey('name', $export);
-        $this->assertArrayHasKey('type', $export);
-        $this->assertArrayHasKey('composite', $export);
-        $this->assertArrayHasKey('max_char', $export);
-        $this->assertArrayHasKey('value', $export);
-        $this->assertArrayHasKey('call', $export);
-        
-        $this->assertEquals($expected['name'], $export['name']);
-        $this->assertEquals($expected['type'], $export['type']);
-        $this->assertEquals($expected['composite'], $export['composite']);
-        $this->assertEquals($expected['call'], $export['call']);
-        $this->assertEquals($expected['max_char'], $export['max_char']);
-        $this->assertInternalType('array', $export['value']);
-    }   
-    
+
+        $this->assertInternalType('array', $trace);
+        $this->assertArrayHasKey('name', $trace);
+        $this->assertArrayHasKey('type', $trace);
+        $this->assertArrayHasKey('composite', $trace);
+        $this->assertArrayHasKey('max_char', $trace);
+        $this->assertArrayHasKey('value', $trace);
+        $this->assertArrayHasKey('call', $trace);
+
+        $this->assertEquals($expected['name'], $trace['name']);
+        $this->assertEquals($expected['type'], $trace['type']);
+        $this->assertEquals($expected['composite'], $trace['composite']);
+        $this->assertEquals($expected['call'], $trace['call']);
+        $this->assertEquals($expected['max_char'], $trace['max_char']);
+        $this->assertInternalType('array', $trace['value']);
+    }
+
     public function backtraceProvider()
     {
         return array(
@@ -440,4 +911,5 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             ),
         );
     }
+
 }
