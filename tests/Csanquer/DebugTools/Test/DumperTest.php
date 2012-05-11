@@ -415,7 +415,24 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->assertEquals($expected, $dump);
+        $this->assertInternalType('array', $dump);
+        $this->assertArrayHasKey('name', $dump);
+        $this->assertArrayHasKey('type', $dump);
+        $this->assertArrayHasKey('composite', $dump);
+        $this->assertArrayHasKey('resource_type', $dump);
+        $this->assertArrayHasKey('value', $dump);
+        $this->assertArrayHasKey('call', $dump);
+        
+        $this->assertEquals('a custom resource dump', $dump['name']);
+        $this->assertEquals('resource', $dump['type']);
+        $this->assertEquals('stream', $dump['resource_type']);
+        $this->assertFalse($dump['composite']);
+        $this->assertEquals(array(
+            'file' => __FILE__,
+            'line' => $callLine + 1,
+                ), $dump['call']);
+
+        $this->assertInternalType('string', $dump['value']);
     }
 
     public function testDumpException()

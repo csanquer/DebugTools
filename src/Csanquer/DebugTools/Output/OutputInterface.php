@@ -6,6 +6,7 @@ namespace Csanquer\DebugTools\Output;
  * OutputInterface
  *
  * @author Charles SANQUER <charles.sanquer@gmail.com>
+ * @codeCoverageIgnore
  */
 interface OutputInterface
 {
