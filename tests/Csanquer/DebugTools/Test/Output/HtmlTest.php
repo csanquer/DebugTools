@@ -12,7 +12,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Csanquer\DebugTools\Output\Html
      */
-    protected $object;
+    protected $output;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,15 +20,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Html;
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
+        $this->output = new Html();
     }
 
     /**

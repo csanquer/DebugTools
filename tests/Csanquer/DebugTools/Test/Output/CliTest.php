@@ -12,7 +12,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Csanquer\DebugTools\Output\Cli
      */
-    protected $object;
+    protected $output;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -20,15 +20,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Cli;
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
+        $this->output = new Cli();
     }
     
     /**

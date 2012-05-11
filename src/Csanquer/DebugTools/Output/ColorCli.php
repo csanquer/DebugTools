@@ -7,7 +7,7 @@ namespace Csanquer\DebugTools\Output;
  *
  * @author Charles SANQUER <charles.sanquer@gmail.com>
  */
-class ColorCli extends AbstractCli
+class ColorCli extends Cli
 {
     /**
      *
