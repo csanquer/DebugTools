@@ -1,5 +1,5 @@
 DebugTools
-===============
+==========
 PHP Debug Utilities library to help debugging when tools like xdebug are not available
 
 Licensing
