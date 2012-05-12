@@ -1,5 +1,5 @@
-DebugTools
-==========
+PHP DebugTools
+==============
 PHP Debug Utilities library to help debugging when tools like xdebug are not available
 
 Licensing
@@ -7,14 +7,14 @@ Licensing
 
 Copyright (C) 2012 Charles SANQUER <charles.sanquer@spyrit.net>
 
-This file is part of DebugHelper.
+This file is part of PHP DebugTools.
 
-DebugHelper is free software: you can redistribute it and/or modify
+PHP DebugTools is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-DebugHelper is distributed in the hope that it will be useful,
+PHP DebugTools is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
