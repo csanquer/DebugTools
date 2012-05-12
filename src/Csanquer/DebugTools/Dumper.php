@@ -140,16 +140,71 @@ class Dumper
      */
     public function backtrace(array $options = array())
     {
+        $maxCharacter = isset($options['max_char']) ? (int) $options['max_char'] : 180;
         return array(
             'name' => 'backtrace',
             'type' => 'backtrace',
             'composite' => true,
-            'max_char' => isset($options['max_char']) ? (int) $options['max_char'] : 180,
-            'value' => debug_backtrace(),
+            'max_char' => $maxCharacter,
+            'value' => $this->doDumpBacktrace(debug_backtrace(), $maxCharacter),
             'call' => $this->getCallInfos(empty($options['function']) ? __FUNCTION__ : $options['function'], empty($options['class']) ? null : $options['class'])
         );
     }
 
+    /**
+     *
+     * @param array $trace debug_backtrace array
+     * @param int $maxCharacter
+     * @return array 
+     */
+    protected function doDumpBacktrace(array $trace, $maxCharacter = null)
+    {
+        $dump = array();
+        foreach ($trace as $call => $row)
+        {
+            $rowDump = array();
+            if (isset($row['function']))
+            {
+                $rowDump['function'] = $row['function'];
+            }
+            
+            if (isset($row['line']))
+            {
+                $rowDump['line'] = $row['line'];
+            }
+            
+            if (isset($row['file']))
+            {
+                $rowDump['file'] = $row['file'];
+            }
+            
+            if (isset($row['class']))
+            {
+                $rowDump['class'] = $row['class'];
+            }
+            
+            if (isset($row['object']))
+            {
+                $rowDump['object'] = $this->doDumpObject($row['object'], 1, $maxCharacter, false, false, 0);
+            }
+            
+            if (isset($row['type']))
+            {
+                $rowDump['type'] = $row['type'];
+            }
+            
+            if (isset($row['args']))
+            {
+                foreach ($row['args'] as $arg)
+                {
+                    $rowDump['args'][] = $this->doDump($arg, 1, $maxCharacter, false, false, 0);
+                }
+            }
+            $dump[] = $rowDump;
+        }
+        return $dump;
+    }
+    
     /**
      *  custom dump to dump infos array
      * 
@@ -157,6 +212,8 @@ class Dumper
      * @param string $name default = null, variable name to display
      * @param int $maxDepth default = 4
      * @param array $options default = array(), available options : <br/>
+     *   - bool dump_content = true, display content of array and object <br/>
+     *   - bool with_trace default = true, if true and the dumped var is an exception it displays the Exception backtrace <br/>
      *   - int max_char = 180, max character to show if the variable is a string <br/>
      *   - string function default = this function's name, function name to search from backtrace, optional only use if you wrapped Dumper class <br/>
      *   - string class default = null, class name to search from backtrace, optional only use if you wrapped Dumper class <br/>
@@ -166,7 +223,12 @@ class Dumper
     public function dump($var, $name = null, $maxDepth = 4, array $options = array())
     {
         $dump = $this->doDump(
-                $var, is_numeric($maxDepth) && $maxDepth >= 0 ? $maxDepth : 4, isset($options['max_char']) ? (int) $options['max_char'] : null, isset($options['dump_content']) ? (bool) $options['dump_content'] : true, isset($options['with_trace']) ? (bool) $options['with_trace'] : true, 0
+                $var, 
+                is_numeric($maxDepth) && $maxDepth >= 0 ? $maxDepth : 4, 
+                isset($options['max_char']) ? (int) $options['max_char'] : null, 
+                isset($options['dump_content']) ? (bool) $options['dump_content'] : true, 
+                isset($options['with_trace']) ? (bool) $options['with_trace'] : true, 
+                0
         );
 
         $dump['name'] = $name;
@@ -344,11 +406,12 @@ class Dumper
                 {
                     if ($displayTrace)
                     {
+                        $maxChars = isset($maxCharacter) ? (int) $maxCharacter : 180;
                         $propertiesList['trace'] = array(
                             'type' => 'backtrace',
                             'composite' => true,
-                            'max_char' => isset($maxCharacter) ? (int) $maxCharacter : 180,
-                            'value' => $object->getTrace(),
+                            'max_char' => $maxChars,
+                            'value' => $this->doDumpBacktrace($object->getTrace(), $maxChars),
                         );
                     }
                     
