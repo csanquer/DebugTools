@@ -35,7 +35,7 @@ class Cli extends AbstractOutput
         return "\n".$this->applyStyle(str_repeat($char, $number), 'box')."\n";
     }
 
-    protected function formatDump($dump)
+    protected function formatDump($dump, $depth = 0)
     {
         $output = '';
         $type = strtolower($dump['type']);
@@ -72,13 +72,19 @@ class Cli extends AbstractOutput
                 $output .= $this->applyStyle(ucfirst($dump['type']).'('.$dump['value'].') of type '.$dump['resource_type'], $type);
                 break;
             
+            case 'array':
+                $output .= $this->formatArray($dump, $depth);
+                break;
             case 'exception':
+                $output .= $this->formatException($dump, $depth);
                 break;
             
             case 'object':
+                $output .= $this->formatObject($dump, $depth);
                 break;
             
             case 'property':
+                $output .= $this->formatProperty($dump, $depth);
                 break;
             
         }
@@ -94,31 +100,52 @@ class Cli extends AbstractOutput
         return '';
     }
     
-    protected function formatArray($dump)
+    protected function formatArray($dump, $depth = 0)
+    {
+        $output = $this->applyStyle('array', 'type_array_label').' '.
+            $this->applyStyle('(length = ', 'type_array_lengthlabel').
+            $this->applyStyle($dump['length'], 'type_array_length').
+            $this->applyStyle(')', 'type_array_lengthlabel');
+
+        if (is_array($dump['value']))
+        {
+            $output .= ' {'."\n";
+
+            foreach($dump['value'] as $key => $dumpKey)
+            {
+                $output .= str_repeat($this->getDefaultIndentChar(),($depth+1) * $this->getDefaultIndentNumber()).
+                    '['.(is_int($key)? $this->applyStyle($key, 'type_int') : $this->applyStyle('\''.$key.'\'', 'type_string') ).'] => '.
+                    $this->formatDump($dumpKey, $depth+1)."\n";
+            }
+            $output .= str_repeat($this->getDefaultIndentChar(), $depth * $this->getDefaultIndentNumber()).'}';
+        }
+        else
+        {
+            $output .= ' ...';
+        }
+        return $output;
+    }
+    
+    protected function formatObject($dump, $depth = 0)
+    {
+
+    }
+        
+    protected function formatProperty($dump, $depth = 0)
     {
         
     }
     
-    protected function formatObject($dump)
-    {
-        
-    }
-        
-    protected function formatProperty($dump)
-    {
-        
-    }
-    
-    protected function formatException($dump)
+    protected function formatException($dump, $depth = 0)
     {
         
     }
     
     protected function formatBacktrace($trace)
     {
-        $dump = '';
+        $output = '';
         var_dump($trace);
-        return $dump;
+        return $output;
         foreach ($trace as $call => $row)
         {
             $rowDump = '# ';
@@ -159,10 +186,10 @@ class Cli extends AbstractOutput
                 $rowDump .= $this->formatCallInfos(array('file' => $row['file'], 'line' => $row['line']));
             }
             
-            $dump .= $rowDump ."\n";
+            $output .= $rowDump ."\n";
         }
 
-        return $dump;
+        return $output;
     }
     
     protected function formatCallInfos(array $callTrace)

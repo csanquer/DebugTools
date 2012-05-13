@@ -145,6 +145,8 @@ class CliTest extends \PHPUnit_Framework_TestCase
     public function formatProvider()
     {
         $sepLine = str_repeat('-', 80);
+        $indent = str_repeat(' ', 4);
+        
         return array(
             array(
                 array(
@@ -239,6 +241,74 @@ class CliTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
                 "\n" . $sepLine . "\na custom resource dump = Resource(163) of type stream\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'an array',
+                    'type' => 'array',
+                    'composite' => true,
+                    'length' => 3,
+                    'value' => array(
+                        'a' =>
+                        array(
+                            'type' => 'int',
+                            'value' => 1,
+                            'composite' => false,
+                        ),
+                        'b' =>
+                        array(
+                            'type' => 'string',
+                            'value' => 'hello',
+                            'length' => 5,
+                            'max_length' => null,
+                            'composite' => false,
+                        ),
+                        0 => array(
+                            'type' => 'array',
+                            'composite' => true,
+                            'value' =>
+                            array(
+                                'c' =>
+                                array(
+                                    'type' => 'array',
+                                    'composite' => true,
+                                    'value' =>
+                                    array(
+                                        0 =>
+                                        array(
+                                            'type' => 'array',
+                                            'composite' => true,
+                                            'value' =>
+                                            array(
+                                                2 =>
+                                                array(
+                                                    'type' => 'array',
+                                                    'composite' => true,
+                                                    'value' => '...',
+                                                    'length' => 2,
+                                                ),
+                                            ),
+                                            'length' => 1,
+                                        ),
+                                        'e' =>
+                                        array(
+                                            'type' => 'bool',
+                                            'value' => true,
+                                            'composite' => false,
+                                        ),
+                                    ),
+                                    'length' => 2,
+                                ),
+                            ),
+                            'length' => 1,
+                        ),
+                    ),
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\nan array = \narray (length = 3) {\n".str_repeat($indent, 1)."['a'] => int 1\n".str_repeat($indent, 1)."['b'] => string (length = 5) 'hello'\n".str_repeat($indent, 1)."[0] => array (length = 1) {\n".str_repeat($indent, 2)."['c'] => array (length = 2) {\n".str_repeat($indent, 3)."[0] => array (length = 1) {\n".str_repeat($indent, 4)."[2] => array (length = 2) ...\n".str_repeat($indent, 3)."}\n".str_repeat($indent, 3)."['e'] => bool true\n".str_repeat($indent, 2)."}\n".str_repeat($indent, 1)."}\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
             array(
                 array(
