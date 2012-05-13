@@ -178,16 +178,6 @@ class Dumper
                 $rowDump['file'] = $row['file'];
             }
             
-            if (isset($row['class']))
-            {
-                $rowDump['class'] = $row['class'];
-            }
-            
-            if (isset($row['object']))
-            {
-                $rowDump['object'] = $this->doDumpObject($row['object'], 1, $maxCharacter, false, false, 0);
-            }
-            
             if (isset($row['type']))
             {
                 $rowDump['type'] = $row['type'];
