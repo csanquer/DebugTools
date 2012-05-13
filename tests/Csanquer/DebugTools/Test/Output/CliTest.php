@@ -1,4 +1,5 @@
 <?php
+
 namespace Csanquer\DebugTools\Test\Output;
 
 use Csanquer\DebugTools\Output\OutputInterface;
@@ -9,6 +10,7 @@ use Csanquer\DebugTools\Output\Cli;
  */
 class CliTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var Csanquer\DebugTools\Output\Cli
      */
@@ -22,15 +24,275 @@ class CliTest extends \PHPUnit_Framework_TestCase
     {
         $this->output = new Cli();
     }
-    
+
     /**
-     * @todo   Implement testFormat().
-     */
-    public function testFormat()
+    public function testFormatBacktrace()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $dump = array(
+            'name' => 'backtrace',
+            'type' => 'backtrace',
+            'composite' => true,
+            'max_char' => 180,
+            'value' => array(
+                array(
+                    'function' => 'backtrace',
+                    'line' => 28,
+                    'file' => '/home/test/test.php',
+                    'class' => 'Csanquer\\DebugTools\\Dumper',
+                    'object' =>
+                    array(
+                        'type' => 'object',
+                        'composite' => true,
+                        'class' => 'Csanquer\\DebugTools\\Dumper',
+                        'properties' => array(),
+                    ),
+                    'type' => '->',
+                ),
+                array(
+                    'function' => 'test',
+                    'line' => 21,
+                    'file' => '/home/test/test.php',
+                    'class' => 'TestDump',
+                    'object' =>
+                    array(
+                        'type' => 'object',
+                        'composite' => true,
+                        'class' => 'TestDump',
+                        'properties' =>
+                        array(
+                        ),
+                    ),
+                    'type' => '->',
+                    'args' =>
+                    array(
+                        0 =>
+                        array(
+                            'type' => 'string',
+                            'value' => 'mike',
+                            'length' => 4,
+                            'max_length' => 180,
+                            'composite' => false,
+                        ),
+                    ),
+                ),
+                array(
+                    'function' => 'hello',
+                    'line' => 37,
+                    'file' => '/home/test/test.php',
+                    'class' => 'TestDump',
+                    'object' =>
+                    array(
+                        'type' => 'object',
+                        'composite' => true,
+                        'class' => 'TestDump',
+                        'properties' =>
+                        array(
+                        ),
+                    ),
+                    'type' => '->',
+                    'args' =>
+                    array(
+                        0 =>
+                        array(
+                            'type' => 'string',
+                            'value' => 'mike',
+                            'length' => 4,
+                            'max_length' => 180,
+                            'composite' => false,
+                        ),
+                    ),
+                ),
+            ),
+            'call' => array(
+                'file' => 'test.php',
+                'line' => 5,
+            ),
+        );
+
+        var_dump($this->output->format($dump));
+        $sepLine = str_repeat('-', 80);
+        $expected = '/\n-{80}\na\szval_dump\s=\sstring\(5\)\s"hello"\srefcount\(\d+\)\n\nCalled\sfrom\stest.php\son\sline\s5\n-{80}\n/';
+        $this->assertRegExp($expected, '');
+    }
+    /**/
+
+    public function testFormatZvalDump()
+    {
+        $dump = array(
+            'name' => 'a zval_dump',
+            'type' => 'zval_dump',
+            'composite' => false,
+            'value' => 'string(5) "hello" refcount(3)' . "\n",
+            'call' => array(
+                'file' => 'test.php',
+                'line' => 5,
+            ),
+        );
+
+        $sepLine = str_repeat('-', 80);
+        $expected = '/\n-{80}\na\szval_dump\s=\sstring\(5\)\s"hello"\srefcount\(\d+\)\n\nCalled\sfrom\stest.php\son\sline\s5\n-{80}\n/';
+        $this->assertRegExp($expected, $this->output->format($dump));
+    }
+
+    /**
+     * @dataProvider formatProvider
+     */
+    public function testFormat($dump, $expected)
+    {
+        $this->assertEquals($expected, $this->output->format($dump));
+    }
+
+    public function formatProvider()
+    {
+        $sepLine = str_repeat('-', 80);
+        return array(
+            array(
+                array(
+                    'name' => 'a null',
+                    'type' => 'NULL',
+                    'composite' => false,
+                    'value' => null,
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na null = NULL\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a true',
+                    'type' => 'bool',
+                    'composite' => false,
+                    'value' => true,
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na true = bool true\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a false',
+                    'type' => 'bool',
+                    'composite' => false,
+                    'value' => false,
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na false = bool false\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a integer',
+                    'type' => 'int',
+                    'composite' => false,
+                    'value' => 2,
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na integer = int 2\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a float',
+                    'type' => 'float',
+                    'composite' => false,
+                    'value' => 2.1,
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na float = float 2.1\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a string',
+                    'type' => 'string',
+                    'composite' => false,
+                    'value' => 'hello',
+                    'length' => 5,
+                    'max_length' => null,
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na string = string (length = 5) 'hello'\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a custom resource dump',
+                    'type' => 'resource',
+                    'composite' => false,
+                    'value' => '163',
+                    'resource_type' => 'stream',
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na custom resource dump = Resource(163) of type stream\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a var export',
+                    'type' => 'var_export',
+                    'composite' => false,
+                    'value' => '\'hello\'',
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na var export = 'hello'\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a var export',
+                    'type' => 'var_export',
+                    'composite' => true,
+                    'value' => "array (\n  0 => 2,\n  'a' => 'b',\n  1 => 'c',\n  'd' => 3,\n)",
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na var export = \narray (\n  0 => 2,\n  'a' => 'b',\n  1 => 'c',\n  'd' => 3,\n)\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => null,
+                    'type' => 'print_r',
+                    'composite' => false,
+                    'value' => 'hello',
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\nhello\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'a var_dump',
+                    'type' => 'var_dump',
+                    'composite' => false,
+                    'value' => "string(5) \"hello\"\n",
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\na var_dump = string(5) \"hello\"\n\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
         );
     }
+
 }

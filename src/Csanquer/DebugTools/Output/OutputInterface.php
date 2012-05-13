@@ -11,6 +11,8 @@ namespace Csanquer\DebugTools\Output;
 interface OutputInterface
 {
     /**
+     * get a string representation of dump information array for this output
+     * 
      * @param array $dump
      * 
      * @return string 
