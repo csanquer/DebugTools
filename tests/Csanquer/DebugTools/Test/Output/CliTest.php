@@ -312,6 +312,118 @@ class CliTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(
+                    'name' => 'an object',
+                    'type' => 'object',
+                    'composite' => true,
+                    'class' => 'Csanquer\DebugTools\Test\TestDump',
+                    'properties' => array(
+                        'f' =>
+                        array(
+                            'name' => 'f',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => true,
+                            'value' =>
+                            array(
+                                'type' => 'string',
+                                'value' => 'static',
+                                'length' => 6,
+                                'max_length' => NULL,
+                                'composite' => false,
+                            ),
+                        ),
+                        'a' =>
+                        array(
+                            'name' => 'a',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'private',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'bool',
+                                'value' => true,
+                                'composite' => false,
+                            ),
+                        ),
+                        'b' =>
+                        array(
+                            'name' => 'b',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'int',
+                                'value' => 1,
+                                'composite' => false,
+                            ),
+                        ),
+                        'c' =>
+                        array(
+                            'name' => 'c',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'public',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'string',
+                                'value' => 'hello',
+                                'length' => 5,
+                                'max_length' => NULL,
+                                'composite' => false,
+                            ),
+                        ),
+                        'd' =>
+                        array(
+                            'name' => 'd',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'private',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'array',
+                                'composite' => true,
+                                'value' =>
+                                array(
+                                    'e' =>
+                                    array(
+                                        'type' => 'int',
+                                        'value' => 5,
+                                        'composite' => false,
+                                    ),
+                                ),
+                                'length' => 1,
+                            ),
+                        ),
+                    ),
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\nan object = \nobject Csanquer\DebugTools\Test\TestDump {\n".str_repeat($indent, 1)."protected static 'f' string (length = 6) 'static'\n".str_repeat($indent, 1)."private 'a' bool true\n".str_repeat($indent, 1)."protected 'b' int 1\n".str_repeat($indent, 1)."public 'c' string (length = 5) 'hello'\n".str_repeat($indent, 1)."private 'd' array (length = 1) {\n".str_repeat($indent, 2)."['e'] => int 5\n".str_repeat($indent, 1)."}\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
+                    'name' => 'an object',
+                    'type' => 'object',
+                    'composite' => true,
+                    'class' => 'Csanquer\DebugTools\Test\TestDump',
+                    'properties' => array(),
+                    'call' => array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\nan object = \nobject Csanquer\DebugTools\Test\TestDump {\n".str_repeat($indent, 1)."...\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            array(
+                array(
                     'name' => 'a var export',
                     'type' => 'var_export',
                     'composite' => false,

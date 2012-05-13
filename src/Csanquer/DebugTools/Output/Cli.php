@@ -128,12 +128,31 @@ class Cli extends AbstractOutput
     
     protected function formatObject($dump, $depth = 0)
     {
+        $output = $this->applyStyle('object','typeLabel_all').' '.$this->applyStyle($dump['class'],'type_class');
 
+        $output .=' {'."\n";
+        if(is_array($dump['properties']) && !empty($dump['properties']))
+        {
+            foreach($dump['properties'] as $name => $property)
+            {
+                $output .= str_repeat($this->getDefaultIndentChar(),($depth+1) * $this->getDefaultIndentNumber()).
+                    $this->formatProperty($property, $depth+1)."\n";
+            }
+        }
+        else
+        {
+            $output .= str_repeat($this->getDefaultIndentChar(),($depth+1) * $this->getDefaultIndentNumber()).'...'."\n";
+        }
+        $output .= str_repeat($this->getDefaultIndentChar(), $depth * $this->getDefaultIndentNumber()).'}';
+        return $output;
     }
         
     protected function formatProperty($dump, $depth = 0)
     {
-        
+        return ($dump['access'] != '' ? $this->applyStyle($dump['access'],'object_'.$dump['access']).' ' : '').
+            ($dump['static'] ? $this->applyStyle('static','object_static').' ' : '').
+            $this->applyStyle('\''.$dump['name'].'\'', 'varName').' '.
+            $this->formatDump($dump['value'], $depth);
     }
     
     protected function formatException($dump, $depth = 0)

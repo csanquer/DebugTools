@@ -487,6 +487,7 @@ class Dumper
         }
 /**/
         $dump = array(
+            'name' => $property->getName(),
             'type' => 'property',
             'composite' => false,
             'access' => $access,

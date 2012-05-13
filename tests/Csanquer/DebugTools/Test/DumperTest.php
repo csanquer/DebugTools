@@ -467,6 +467,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(7, $props);
 
         $this->assertEquals(array(
+            'name' => 'message',
             'type' => 'property',
             'composite' => false,
             'access' => 'protected',
@@ -481,6 +482,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                 )), $props['message']);
 
         $this->assertEquals(array(
+            'name' => 'code',
             'type' => 'property',
             'composite' => false,
             'access' => 'protected',
@@ -493,6 +495,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                 )), $props['code']);
 
         $this->assertEquals(array(
+            'name' => 'file',
             'type' => 'property',
             'composite' => false,
             'access' => 'protected',
@@ -507,6 +510,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                 )), $props['file']);
 
         $this->assertEquals(array(
+            'name' => 'line',
             'type' => 'property',
             'composite' => false,
             'access' => 'protected',
@@ -519,6 +523,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                 )), $props['line']);
 
         $this->assertEquals(array(
+            'name' => 'severity',
             'type' => 'property',
             'composite' => false,
             'access' => 'protected',
@@ -663,6 +668,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                     'properties' => array(
                         'f' =>
                         array(
+                            'name' => 'f',
                             'type' => 'property',
                             'composite' => false,
                             'access' => 'protected',
@@ -678,6 +684,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                         ),
                         'a' =>
                         array(
+                            'name' => 'a',
                             'type' => 'property',
                             'composite' => false,
                             'access' => 'private',
@@ -691,6 +698,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                         ),
                         'b' =>
                         array(
+                            'name' => 'b',
                             'type' => 'property',
                             'composite' => false,
                             'access' => 'protected',
@@ -704,6 +712,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                         ),
                         'c' =>
                         array(
+                            'name' => 'c',
                             'type' => 'property',
                             'composite' => false,
                             'access' => 'public',
@@ -719,6 +728,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                         ),
                         'd' =>
                         array(
+                            'name' => 'd',
                             'type' => 'property',
                             'composite' => false,
                             'access' => 'private',
