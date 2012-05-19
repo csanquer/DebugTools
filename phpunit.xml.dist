@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit 
-    bootstrap="vendor/.composer/autoload.php"
+    bootstrap="vendor/autoload.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
@@ -19,7 +19,7 @@
           <directory suffix=".php">./src/</directory>
           <exclude>
             <directory suffix="Interface.php">./src/</directory>
-        </exclude>
+          </exclude>
         </whitelist>
     </filter>
     
