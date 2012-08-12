@@ -6,6 +6,6 @@ nbproject
 .DS_Store
 __MACOSX
 doc/api
+doc/coverage
 vendor
-build
 phpunit.xml
