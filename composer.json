@@ -13,6 +13,7 @@
     "require": {
         "php": ">=5.3"
     },
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {"Csanquer": "src/"}
     }
