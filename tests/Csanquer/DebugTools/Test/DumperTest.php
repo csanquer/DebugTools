@@ -501,11 +501,11 @@ class DumperTest extends \PHPUnit_Framework_TestCase
             array(
                 'type' => 'string',
                 'value' => __FILE__,
-                'length' => 79,
+                'length' => strlen(__FILE__),
                 'max_length' => NULL,
                 'composite' => false,
                 )), $props['file']);
-
+        
         $this->assertEquals(array(
             'name' => 'line',
             'type' => 'property',
