@@ -2,7 +2,6 @@
 
 namespace Csanquer\DebugTools\Test\Output;
 
-use Csanquer\DebugTools\Output\OutputInterface;
 use Csanquer\DebugTools\Output\Cli;
 
 /**
@@ -146,7 +145,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
     {
         $sepLine = str_repeat('-', 80);
         $indent = str_repeat(' ', 4);
-        
+
         return array(
             array(
                 array(

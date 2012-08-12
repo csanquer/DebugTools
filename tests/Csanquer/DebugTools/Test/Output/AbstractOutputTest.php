@@ -29,7 +29,7 @@ class AbstractOutputTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Csanquer\DebugTools\Output\AbstractOutput', $this->output->setDefaultIndentChar($value));
         $this->assertEquals($expected, $this->output->getDefaultIndentChar());
     }
-    
+
     public function getSetDefaultIndentCharProvider()
     {
         return array(
@@ -38,7 +38,7 @@ class AbstractOutputTest extends \PHPUnit_Framework_TestCase
             array("\t", "\t"),
         );
     }
-    
+
     /**
      * @dataProvider getSetDefaultIndentNumberProvider
      */
@@ -48,7 +48,7 @@ class AbstractOutputTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Csanquer\DebugTools\Output\AbstractOutput', $this->output->setDefaultIndentNumber($value));
         $this->assertEquals($expected, $this->output->getDefaultIndentNumber());
     }
-    
+
     public function getSetDefaultIndentNumberProvider()
     {
         return array(

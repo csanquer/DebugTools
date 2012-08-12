@@ -1,7 +1,6 @@
 <?php
 namespace Csanquer\DebugTools\Test\Output;
 
-use Csanquer\DebugTools\Output\OutputInterface;
 use Csanquer\DebugTools\Output\ColorCli;
 
 /**
@@ -22,7 +21,7 @@ class ColorCliTest extends \PHPUnit_Framework_TestCase
     {
         $this->output = new ColorCli();
     }
-    
+
     /**
      * @todo   Implement testFormat().
      */

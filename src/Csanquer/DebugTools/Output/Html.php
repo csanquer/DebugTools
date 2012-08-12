@@ -48,14 +48,13 @@ class Html extends AbstractOutput
             'private' => 'color: #b00000;',
         )
     );
-    
+
     protected static $echoCSS = false;
-    
+
     protected $css;
 
     public function format($dump)
     {
-        
+
     }
 }
-

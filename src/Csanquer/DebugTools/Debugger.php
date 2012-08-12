@@ -65,12 +65,12 @@ class Debugger
      */
     public static function getInstance()
     {
-        if (!isset(self::$instance))
-        {
+        if (!isset(self::$instance)) {
             $c = __CLASS__;
 
             self::$instance = new $c;
         }
+
         return self::$instance;
     }
 
@@ -116,10 +116,10 @@ class Debugger
      */
     public function render()
     {
-        if ($this->enabled)
-        {
+        if ($this->enabled) {
             return $this->output;
         }
+
         return null;
     }
 
@@ -149,20 +149,17 @@ class Debugger
      * append new debug content
      *
      * @param string $output
-     * @param bool $withNewLine default = true
+     * @param bool   $withNewLine default = true
      */
     public function append($output, $withNewLine = true)
     {
-        if ($this->enabled)
-        {
-            if (empty($output))
-            {
+        if ($this->enabled) {
+            if (empty($output)) {
                 $output = '';
             }
             $this->output .= (string) ($output);
 
-            if ($withNewLine)
-            {
+            if ($withNewLine) {
                 $this->output .=$this->isCli() ? PHP_EOL : '<br/>';
             }
         }
@@ -170,21 +167,21 @@ class Debugger
 
     public function group($groupname)
     {
-        
+
     }
-    
+
     public function endGroup()
     {
-        
+
     }
-    
+
     /**
      * dump a variable with xdebug-like var_dump
      *
-     * @param mixed $var
-     * @param string $name default : NULL
-     * @param int $maxDepth max recursion
-     * @param int $maxCharacter = null max character to show if the variable is a string
+     * @param mixed  $var
+     * @param string $name         default : NULL
+     * @param int    $maxDepth     max recursion
+     * @param int    $maxCharacter = null max character to show if the variable is a string
      */
     public function dump($var, $name = null, $maxDepth = 4, $maxCharacter = null)
     {
@@ -194,7 +191,7 @@ class Debugger
     /**
      * dump a variable with print_r
      *
-     * @param mixed $var
+     * @param mixed  $var
      * @param string $name default : NULL
      */
     public function print_r($var, $name = null)
@@ -205,7 +202,7 @@ class Debugger
     /**
      * dump a variable with original var_dump
      *
-     * @param mixed $var
+     * @param mixed  $var
      * @param string $name default : NULL
      */
     public function var_dump($var, $name = null)
@@ -216,18 +213,18 @@ class Debugger
     /**
      * dump a variable with original zval_dump
      *
-     * @param mixed $var
+     * @param mixed  $var
      * @param string $name default : NULL
      */
     public function zval_dump($var, $name = null)
     {
         $this->append($this->debug->zval_dump($var, $name, true, array('function' => __FUNCTION__, 'class' => __CLASS__)), false);
     }
-    
+
     /**
      * export a variable with original var_export
      *
-     * @param mixed $var
+     * @param mixed  $var
      * @param string $name default : NULL
      */
     public function var_export($var, $name = null)

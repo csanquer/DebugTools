@@ -28,21 +28,21 @@ class OutputFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateOutputNoMode($isCli, $supportColor, $expected)
     {
         $mockFactory = $this->getMock('Csanquer\DebugTools\Output\OutputFactory', array('isCli', 'canSupportColor'));
-        
+
         $mockFactory->expects($this->any())
             ->method('isCli')
             ->will($this->returnValue($isCli))
             ;
-        
+
         $mockFactory->expects($this->any())
             ->method('canSupportColor')
             ->will($this->returnValue($supportColor))
             ;
-        
+
         $output = $mockFactory->createOutput();
         $this->assertInstanceOf($expected, $output);
     }
-    
+
     public function createOutputNoModeProvider()
     {
         return array(
@@ -52,19 +52,16 @@ class OutputFactoryTest extends \PHPUnit_Framework_TestCase
             array(false, true, 'Csanquer\DebugTools\Output\Html'),
         );
     }
-    
+
     /**
      * @dataProvider createOutputProvider
      */
     public function testCreateOutput($mode, $expected)
     {
         $output = $this->factory->createOutput($mode);
-        if (empty($expected))
-        {
-            $this->assertNull($output); 
-        }
-        else
-        {
+        if (empty($expected)) {
+            $this->assertNull($output);
+        } else {
             $this->assertInstanceOf($expected, $output);
         }
     }
@@ -78,7 +75,7 @@ class OutputFactoryTest extends \PHPUnit_Framework_TestCase
             array(OutputFactory::MODE_NO_FORMAT, null),
         );
     }
-    
+
     /**
      * @covers Csanquer\DebugTools\Output\OutputFactory::getAvailableOutput
      */

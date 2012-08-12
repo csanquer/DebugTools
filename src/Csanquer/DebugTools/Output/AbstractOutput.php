@@ -22,7 +22,7 @@ abstract class AbstractOutput implements OutputInterface
      * @var int
      */
     protected $defaultIndentNumber = 4;
-    
+
     /**
      *
      * @return string
@@ -31,19 +31,20 @@ abstract class AbstractOutput implements OutputInterface
     {
         return $this->defaultIndentChar;
     }
-    
+
     /**
      *
      * @param string $char
-     * 
-     * @return \DebugTools\Output\OutputInterface 
+     *
+     * @return \DebugTools\Output\OutputInterface
      */
     public function setDefaultIndentChar($char)
     {
         $this->defaultIndentChar = (string) $char;
+
         return $this;
     }
-    
+
     /**
      *
      * @return int
@@ -52,17 +53,17 @@ abstract class AbstractOutput implements OutputInterface
     {
         return $this->defaultIndentNumber;
     }
-    
+
     /**
      *
      * @param int $number
-     * 
-     * @return \DebugTools\Output\OutputInterface 
+     *
+     * @return \DebugTools\Output\OutputInterface
      */
     public function setDefaultIndentNumber($number)
     {
         $this->defaultIndentNumber = (int) $number;
-        return $this;
-    }    
-}
 
+        return $this;
+    }
+}

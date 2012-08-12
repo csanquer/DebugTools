@@ -1,7 +1,6 @@
 <?php
 namespace Csanquer\DebugTools\Test\Output;
 
-use Csanquer\DebugTools\Output\OutputInterface;
 use Csanquer\DebugTools\Output\Html;
 
 /**

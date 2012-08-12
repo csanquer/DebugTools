@@ -1,7 +1,6 @@
 <?php
 namespace Csanquer\DebugTools\Test;
 
-use Csanquer\DebugTools\Output\OutputInterface;
 use Csanquer\DebugTools\Output\OutputFactory;
 use Csanquer\DebugTools\Debug;
 
@@ -19,7 +18,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
      * @var resource
      */
     protected $file;
-    
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -50,7 +49,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Csanquer\DebugTools\Debug', $this->debug->setDefaultMaxDepth($value));
         $this->assertEquals($expected, $this->debug->getDefaultMaxDepth());
     }
-    
+
     public function getSetDefaultMaxDepthProvider()
     {
         return array(
@@ -71,7 +70,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Csanquer\DebugTools\Debug', $this->debug->setDefaultMode($value));
         $this->assertEquals($expected, $this->debug->getDefaultMode());
     }
-    
+
     public function getSetDefaultModeProvider()
     {
         return array(
@@ -97,7 +96,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //            $this->assertNotEquals($expectedNotEquals, $result);
 //        }
 //    }
-//    
+//
 //    public function asStringProvider()
 //    {
 //        return array(
@@ -112,7 +111,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //            array(array('a', 1 , 'b' => 'test', array( 0 => 'b')), 'Array', null),
 //        );
 //    }
-//        
+//
 //    /**
 //     * @covers Csanquer\DebugTools\Debug::asString
 //     */
@@ -122,7 +121,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //        $this->assertInternalType('string', $result);
 //        $this->assertEquals('stream', $result);
 //    }
-//    
+//
 //    /**
 //     * @covers Csanquer\DebugTools\Debug::getCallInfos
 //     */
@@ -132,38 +131,38 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //        $infos = $this->debug->getCallInfos();
 //        $this->assertArrayHasKey('file', $infos);
 //        $this->assertArrayHasKey('line', $infos);
-//        
+//
 //        $file = isset($infos['file']) ? $infos['file']: null;
 //        $line = isset($infos['line']) ? $infos['line']: null;
-//        
+//
 //        $this->assertEquals(__FILE__, $file);
 //        $this->assertEquals($callline+1, $line);
-//        
+//
 //        $wrap = new WrapperClass();
 //        $callline = __LINE__;
 //        $infos = $wrap->getCallInfos($this->debug);
-//        
+//
 //        $this->assertArrayHasKey('file', $infos);
 //        $this->assertArrayHasKey('line', $infos);
-//        
+//
 //        $file = isset($infos['file']) ? $infos['file']: null;
 //        $line = isset($infos['line']) ? $infos['line']: null;
-//        
+//
 //        $this->assertEquals(__FILE__, $file);
 //        $this->assertEquals($callline+1, $line);
-//        
+//
 //        $callline = __LINE__;
 //        $infos = wrapperFunction($this->debug);
 //        $this->assertArrayHasKey('file', $infos);
 //        $this->assertArrayHasKey('line', $infos);
-//        
+//
 //        $file = isset($infos['file']) ? $infos['file']: null;
 //        $line = isset($infos['line']) ? $infos['line']: null;
-//        
+//
 //        $this->assertEquals(__FILE__, $file);
 //        $this->assertEquals($callline+1, $line);
 //    }
-//   
+//
 //    /**
 //     * @covers Csanquer\DebugTools\Debug::var_export
 //     * @dataProvider var_exportProvider
@@ -172,22 +171,22 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //    {
 //        $callLine = __LINE__;
 //        $export = $this->debug->var_export($var, 'a var export', true, OutputFactory::MODE_NO_FORMAT);
-//        
+//
 //        $expected = array(
 //            'name' => 'a var export',
 //            'type' => 'var_export',
 //            'composite' => is_array($var) || is_object($var),
 //            'value' => $expectedValue,
-//            'call' => 
+//            'call' =>
 //            array (
 //                'file' => __FILE__,
 //                'line' => $callLine+1,
 //            ),
 //        );
-//        
+//
 //        $this->assertEquals($expected, $export);
 //    }
-// 
+//
 //    public function var_exportProvider()
 //    {
 //        return array(
@@ -217,7 +216,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //            ),
 //        );
 //    }
-//    
+//
 //    /**
 //     * @covers Csanquer\DebugTools\Debug::print_r
 //     * @todo   Implement testPrint_r().
@@ -265,7 +264,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //          'This test has not been implemented yet.'
 //        );
 //    }
-//        
+//
 //    /**
 //     * @covers Csanquer\DebugTools\Debug::Backtrace
 //     * @todo   Implement testBacktrace().
@@ -276,5 +275,5 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 //        $this->markTestIncomplete(
 //          'This test has not been implemented yet.'
 //        );
-//    }   
+//    }
 }

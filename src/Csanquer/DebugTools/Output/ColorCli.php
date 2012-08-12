@@ -84,10 +84,10 @@ class ColorCli extends Cli
           'protected' => array('fg' => 'yellow', 'bg' => null),
           'private' => array('fg' => 'red', 'bg' => null),
         )
-    ); 
+    );
 
     protected function applyStyle($string, $style = null)
     {
-        
+
     }
 }

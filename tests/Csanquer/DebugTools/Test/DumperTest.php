@@ -2,14 +2,12 @@
 
 namespace Csanquer\DebugTools\Test;
 
-use Csanquer\DebugTools\Output\OutputInterface;
-use Csanquer\DebugTools\Output\OutputFactory;
 use Csanquer\DebugTools\Debug;
 use Csanquer\DebugTools\Dumper;
 
 class WithoutToString
 {
-    
+
 }
 
 class WithToString
@@ -91,8 +89,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $result = $this->dumper->asString($value);
         $this->assertInternalType('string', $result);
         $this->assertEquals($expectedEquals, $result);
-        if (is_string($expectedNotEquals))
-        {
+        if (is_string($expectedNotEquals)) {
             $this->assertNotEquals($expectedNotEquals, $result);
         }
     }
@@ -422,7 +419,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('resource_type', $dump);
         $this->assertArrayHasKey('value', $dump);
         $this->assertArrayHasKey('call', $dump);
-        
+
         $this->assertEquals('a custom resource dump', $dump['name']);
         $this->assertEquals('resource', $dump['type']);
         $this->assertEquals('stream', $dump['resource_type']);
@@ -534,12 +531,12 @@ class DumperTest extends \PHPUnit_Framework_TestCase
                 'value' => 1,
                 'composite' => false,
                 )), $props['severity']);
-        
+
         //trace
         $this->assertArrayHasKey('trace', $props);
         $this->assertInternalType('array', $props['trace']);
         $this->assertNotEmpty($props['trace']);
-        
+
         // previous exception
         $this->assertArrayHasKey('previous', $props);
         $this->assertInternalType('array', $props['previous']);
@@ -552,7 +549,7 @@ class DumperTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($props['previous']['composite']);
         $this->assertEquals('Exception', $props['previous']['class']);
         $this->assertCount(5, $props['previous']['properties']);
-        
+
         // previous exception trace
         $this->assertArrayNotHasKey('trace', $props['previous']['properties']);
     }
