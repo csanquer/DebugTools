@@ -8,4 +8,5 @@ __MACOSX
 doc/api
 doc/coverage
 vendor
+phpdoc.xml
 phpunit.xml
