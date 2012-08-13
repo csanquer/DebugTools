@@ -25,96 +25,95 @@ class CliTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    public function testFormatBacktrace()
-    {
-        $dump = array(
-            'name' => 'backtrace',
-            'type' => 'backtrace',
-            'composite' => true,
-            'max_char' => 180,
-            'value' => array(
-                array(
-                    'function' => 'backtrace',
-                    'line' => 28,
-                    'file' => '/home/test/test.php',
-                    'class' => 'Csanquer\\DebugTools\\Dumper',
-                    'object' =>
-                    array(
-                        'type' => 'object',
-                        'composite' => true,
-                        'class' => 'Csanquer\\DebugTools\\Dumper',
-                        'properties' => array(),
-                    ),
-                    'type' => '->',
-                ),
-                array(
-                    'function' => 'test',
-                    'line' => 21,
-                    'file' => '/home/test/test.php',
-                    'class' => 'TestDump',
-                    'object' =>
-                    array(
-                        'type' => 'object',
-                        'composite' => true,
-                        'class' => 'TestDump',
-                        'properties' =>
-                        array(
-                        ),
-                    ),
-                    'type' => '->',
-                    'args' =>
-                    array(
-                        0 =>
-                        array(
-                            'type' => 'string',
-                            'value' => 'mike',
-                            'length' => 4,
-                            'max_length' => 180,
-                            'composite' => false,
-                        ),
-                    ),
-                ),
-                array(
-                    'function' => 'hello',
-                    'line' => 37,
-                    'file' => '/home/test/test.php',
-                    'class' => 'TestDump',
-                    'object' =>
-                    array(
-                        'type' => 'object',
-                        'composite' => true,
-                        'class' => 'TestDump',
-                        'properties' =>
-                        array(
-                        ),
-                    ),
-                    'type' => '->',
-                    'args' =>
-                    array(
-                        0 =>
-                        array(
-                            'type' => 'string',
-                            'value' => 'mike',
-                            'length' => 4,
-                            'max_length' => 180,
-                            'composite' => false,
-                        ),
-                    ),
-                ),
-            ),
-            'call' => array(
-                'file' => 'test.php',
-                'line' => 5,
-            ),
-        );
+      public function testFormatBacktrace()
+      {
+      $dump = array(
+      'name' => 'backtrace',
+      'type' => 'backtrace',
+      'composite' => true,
+      'max_char' => 180,
+      'value' => array(
+      array(
+      'function' => 'backtrace',
+      'line' => 28,
+      'file' => '/home/test/test.php',
+      'class' => 'Csanquer\\DebugTools\\Dumper',
+      'object' =>
+      array(
+      'type' => 'object',
+      'composite' => true,
+      'class' => 'Csanquer\\DebugTools\\Dumper',
+      'properties' => array(),
+      ),
+      'type' => '->',
+      ),
+      array(
+      'function' => 'test',
+      'line' => 21,
+      'file' => '/home/test/test.php',
+      'class' => 'TestDump',
+      'object' =>
+      array(
+      'type' => 'object',
+      'composite' => true,
+      'class' => 'TestDump',
+      'properties' =>
+      array(
+      ),
+      ),
+      'type' => '->',
+      'args' =>
+      array(
+      0 =>
+      array(
+      'type' => 'string',
+      'value' => 'mike',
+      'length' => 4,
+      'max_length' => 180,
+      'composite' => false,
+      ),
+      ),
+      ),
+      array(
+      'function' => 'hello',
+      'line' => 37,
+      'file' => '/home/test/test.php',
+      'class' => 'TestDump',
+      'object' =>
+      array(
+      'type' => 'object',
+      'composite' => true,
+      'class' => 'TestDump',
+      'properties' =>
+      array(
+      ),
+      ),
+      'type' => '->',
+      'args' =>
+      array(
+      0 =>
+      array(
+      'type' => 'string',
+      'value' => 'mike',
+      'length' => 4,
+      'max_length' => 180,
+      'composite' => false,
+      ),
+      ),
+      ),
+      ),
+      'call' => array(
+      'file' => 'test.php',
+      'line' => 5,
+      ),
+      );
 
-        var_dump($this->output->format($dump));
-        $sepLine = str_repeat('-', 80);
-        $expected = '/\n-{80}\na\szval_dump\s=\sstring\(5\)\s"hello"\srefcount\(\d+\)\n\nCalled\sfrom\stest.php\son\sline\s5\n-{80}\n/';
-        $this->assertRegExp($expected, '');
-    }
-    /**/
-
+      var_dump($this->output->format($dump));
+      $sepLine = str_repeat('-', 80);
+      $expected = '/\n-{80}\na\szval_dump\s=\sstring\(5\)\s"hello"\srefcount\(\d+\)\n\nCalled\sfrom\stest.php\son\sline\s5\n-{80}\n/';
+      $this->assertRegExp($expected, '');
+      }
+      /* */
     public function testFormatZvalDump()
     {
         $dump = array(
@@ -147,6 +146,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
         $indent = str_repeat(' ', 4);
 
         return array(
+            //null
             array(
                 array(
                     'name' => 'a null',
@@ -160,6 +160,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na null = NULL\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //true
             array(
                 array(
                     'name' => 'a true',
@@ -173,6 +174,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na true = bool true\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //false
             array(
                 array(
                     'name' => 'a false',
@@ -186,6 +188,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na false = bool false\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //an integer
             array(
                 array(
                     'name' => 'a integer',
@@ -199,6 +202,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na integer = int 2\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //a float
             array(
                 array(
                     'name' => 'a float',
@@ -212,6 +216,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na float = float 2.1\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //a string
             array(
                 array(
                     'name' => 'a string',
@@ -227,6 +232,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na string = string (length = 5) 'hello'\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //a file resource
             array(
                 array(
                     'name' => 'a custom resource dump',
@@ -241,6 +247,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na custom resource dump = Resource(163) of type stream\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            //an array
             array(
                 array(
                     'name' => 'an array',
@@ -307,8 +314,9 @@ class CliTest extends \PHPUnit_Framework_TestCase
                         'line' => 5,
                     ),
                 ),
-                "\n" . $sepLine . "\nan array = \narray (length = 3) {\n".str_repeat($indent, 1)."['a'] => int 1\n".str_repeat($indent, 1)."['b'] => string (length = 5) 'hello'\n".str_repeat($indent, 1)."[0] => array (length = 1) {\n".str_repeat($indent, 2)."['c'] => array (length = 2) {\n".str_repeat($indent, 3)."[0] => array (length = 1) {\n".str_repeat($indent, 4)."[2] => array (length = 2) ...\n".str_repeat($indent, 3)."}\n".str_repeat($indent, 3)."['e'] => bool true\n".str_repeat($indent, 2)."}\n".str_repeat($indent, 1)."}\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
+                "\n" . $sepLine . "\nan array = \narray (length = 3) {\n" . str_repeat($indent, 1) . "['a'] => int 1\n" . str_repeat($indent, 1) . "['b'] => string (length = 5) 'hello'\n" . str_repeat($indent, 1) . "[0] => array (length = 1) {\n" . str_repeat($indent, 2) . "['c'] => array (length = 2) {\n" . str_repeat($indent, 3) . "[0] => array (length = 1) {\n" . str_repeat($indent, 4) . "[2] => array (length = 2) ...\n" . str_repeat($indent, 3) . "}\n" . str_repeat($indent, 3) . "['e'] => bool true\n" . str_repeat($indent, 2) . "}\n" . str_repeat($indent, 1) . "}\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            // object with properties
             array(
                 array(
                     'name' => 'an object',
@@ -405,8 +413,9 @@ class CliTest extends \PHPUnit_Framework_TestCase
                         'line' => 5,
                     ),
                 ),
-                "\n" . $sepLine . "\nan object = \nobject Csanquer\DebugTools\Test\TestDump {\n".str_repeat($indent, 1)."protected static 'f' string (length = 6) 'static'\n".str_repeat($indent, 1)."private 'a' bool true\n".str_repeat($indent, 1)."protected 'b' int 1\n".str_repeat($indent, 1)."public 'c' string (length = 5) 'hello'\n".str_repeat($indent, 1)."private 'd' array (length = 1) {\n".str_repeat($indent, 2)."['e'] => int 5\n".str_repeat($indent, 1)."}\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
+                "\n" . $sepLine . "\nan object = \nobject Csanquer\DebugTools\Test\TestDump {\n" . str_repeat($indent, 1) . "protected static 'f' string (length = 6) 'static'\n" . str_repeat($indent, 1) . "private 'a' bool true\n" . str_repeat($indent, 1) . "protected 'b' int 1\n" . str_repeat($indent, 1) . "public 'c' string (length = 5) 'hello'\n" . str_repeat($indent, 1) . "private 'd' array (length = 1) {\n" . str_repeat($indent, 2) . "['e'] => int 5\n" . str_repeat($indent, 1) . "}\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            // object without properties
             array(
                 array(
                     'name' => 'an object',
@@ -419,8 +428,9 @@ class CliTest extends \PHPUnit_Framework_TestCase
                         'line' => 5,
                     ),
                 ),
-                "\n" . $sepLine . "\nan object = \nobject Csanquer\DebugTools\Test\TestDump {\n".str_repeat($indent, 1)."...\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
+                "\n" . $sepLine . "\nan object = \nobject Csanquer\DebugTools\Test\TestDump {\n" . str_repeat($indent, 1) . "...\n}\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            // var_export string
             array(
                 array(
                     'name' => 'a var export',
@@ -434,6 +444,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na var export = 'hello'\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            // var_export array
             array(
                 array(
                     'name' => 'a var export',
@@ -447,6 +458,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\na var export = \narray (\n  0 => 2,\n  'a' => 'b',\n  1 => 'c',\n  'd' => 3,\n)\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            // print_r
             array(
                 array(
                     'name' => null,
@@ -460,6 +472,7 @@ class CliTest extends \PHPUnit_Framework_TestCase
                 ),
                 "\n" . $sepLine . "\nhello\nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
+            // var dump
             array(
                 array(
                     'name' => 'a var_dump',
@@ -472,6 +485,198 @@ class CliTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
                 "\n" . $sepLine . "\na var_dump = string(5) \"hello\"\n\nCalled from test.php on line 5\n" . $sepLine . "\n"
+            ),
+            // Exception
+            array(
+                array(
+                    'type' => 'exception',
+                    'composite' => true,
+                    'class' => 'ErrorException',
+                    'properties' =>
+                    array(
+                        'message' =>
+                        array(
+                            'name' => 'message',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'string',
+                                'value' => 'an error occured',
+                                'length' => 16,
+                                'max_length' => NULL,
+                                'composite' => false,
+                            ),
+                        ),
+                        'code' =>
+                        array(
+                            'name' => 'code',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'int',
+                                'value' => 101,
+                                'composite' => false,
+                            ),
+                        ),
+                        'file' =>
+                        array(
+                            'name' => 'file',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'string',
+                                'value' => '/home/test/testException.php',
+                                'length' => 37,
+                                'max_length' => NULL,
+                                'composite' => false,
+                            ),
+                        ),
+                        'line' =>
+                        array(
+                            'name' => 'line',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'int',
+                                'value' => 9,
+                                'composite' => false,
+                            ),
+                        ),
+                        'severity' =>
+                        array(
+                            'name' => 'severity',
+                            'type' => 'property',
+                            'composite' => false,
+                            'access' => 'protected',
+                            'static' => false,
+                            'value' =>
+                            array(
+                                'type' => 'int',
+                                'value' => 1,
+                                'composite' => false,
+                            ),
+                        ),
+                        'trace' =>
+                        array(
+                            'type' => 'backtrace',
+                            'composite' => true,
+                            'max_char' => 180,
+                            'value' =>
+                            array(
+                                0 =>
+                                array(
+                                    'function' => 'testDumpException',
+                                    'line' => 13,
+                                    'file' => '/home/test/testException.php',
+                                ),
+                            ),
+                        ),
+                        'previous' =>
+                        array(
+                            'type' => 'exception',
+                            'composite' => true,
+                            'class' => 'Exception',
+                            'properties' =>
+                            array(
+                                'message' =>
+                                array(
+                                    'name' => 'message',
+                                    'type' => 'property',
+                                    'composite' => false,
+                                    'access' => 'protected',
+                                    'static' => false,
+                                    'value' =>
+                                    array(
+                                        'type' => 'string',
+                                        'value' => 'an exception',
+                                        'length' => 12,
+                                        'max_length' => NULL,
+                                        'composite' => false,
+                                    ),
+                                ),
+                                'string' =>
+                                array(
+                                    'name' => 'string',
+                                    'type' => 'property',
+                                    'composite' => false,
+                                    'access' => 'private',
+                                    'static' => false,
+                                    'value' =>
+                                    array(
+                                        'type' => 'string',
+                                        'value' => '',
+                                        'length' => 0,
+                                        'max_length' => NULL,
+                                        'composite' => false,
+                                    ),
+                                ),
+                                'code' =>
+                                array(
+                                    'name' => 'code',
+                                    'type' => 'property',
+                                    'composite' => false,
+                                    'access' => 'protected',
+                                    'static' => false,
+                                    'value' =>
+                                    array(
+                                        'type' => 'int',
+                                        'value' => 0,
+                                        'composite' => false,
+                                    ),
+                                ),
+                                'file' =>
+                                array(
+                                    'name' => 'file',
+                                    'type' => 'property',
+                                    'composite' => false,
+                                    'access' => 'protected',
+                                    'static' => false,
+                                    'value' =>
+                                    array(
+                                        'type' => 'string',
+                                        'value' => '/home/test/testException.php',
+                                        'length' => 37,
+                                        'max_length' => NULL,
+                                        'composite' => false,
+                                    ),
+                                ),
+                                'line' =>
+                                array(
+                                    'name' => 'line',
+                                    'type' => 'property',
+                                    'composite' => false,
+                                    'access' => 'protected',
+                                    'static' => false,
+                                    'value' =>
+                                    array(
+                                        'type' => 'int',
+                                        'value' => 9,
+                                        'composite' => false,
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                    'name' => 'an exception',
+                    'call' =>
+                    array(
+                        'file' => 'test.php',
+                        'line' => 5,
+                    ),
+                ),
+                "\n" . $sepLine . "\nan exception = \nCalled from test.php on line 5\n" . $sepLine . "\n"
             ),
         );
     }

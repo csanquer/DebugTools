@@ -81,11 +81,6 @@ class Cli extends AbstractOutput
             case 'object':
                 $output .= $this->formatObject($dump, $depth);
                 break;
-
-            case 'property':
-                $output .= $this->formatProperty($dump, $depth);
-                break;
-
         }
 
         return $output;
@@ -151,7 +146,9 @@ class Cli extends AbstractOutput
 
     protected function formatException($dump, $depth = 0)
     {
-
+        $output = 'Exception '.$dump['class'];
+        
+        return $output;
     }
 
     protected function formatBacktrace($trace)

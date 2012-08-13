@@ -179,7 +179,7 @@ class Dumper
 
             if (isset($row['args'])) {
                 foreach ($row['args'] as $arg) {
-                    $rowDump['args'][] = $this->doDump($arg, 1, $maxCharacter, false, false, 0);
+                    $rowDump['args'][] = $this->doDump($arg, 1, $maxCharacter, true, false, 0);
                 }
             }
             $dump[] = $rowDump;
